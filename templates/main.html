@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Russell's GCP Sandbox</title>
+   <link rel="stylesheet" type="text/css" href="/static/style.css">
+   <script>
+        var f = ['🌑', '🌒', '🌓', '🌔', '🌝', '🌖', '🌗', '🌘'];
+
+        function loop() {
+            location.hash = f[Math.floor((Date.now()/100)%f.length)];
+
+            setTimeout(loop, 50);
+        }
+
+        loop();
+   </script>
+  </head>
+  <body>
+    <div id="container">
+      <div class="pagetitle">
+        <h1>Welcome to Russell's GCP Playground!</h1>
+        Below are links to apps I'm tinkering with to try out the GCP environment!
+      </div>
+      <div id="main">
+        <div id="links">
+          <ul style="list-basic">
+              <li><a href="/form">Bocce Ball Tournament Registration</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

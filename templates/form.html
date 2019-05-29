@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>2019, 2nd Annual Bocce Ball Tournament</title>
+   <link rel="stylesheet" type="text/css" href="/static/style.css">
+  </head>
+  <body>
+    <div id="container">
+      
+      <div class="pagetitle">
+          <img src="/static/bocce_ball_2019.png">
+        <h1>Welcome to the CCS Engineerning 2nd Annual Bocce Ball Tournament Registration!</h1>
+      </div>
+      <div id="main">
+       <p>
+            The bocce ball tournament will be held on August 17th, 2019 at 12:30pm. See the 
+          <a target="_blank" href="https://confluence.cambiahealth.com/confluence/display/CCSE/Second+Annual+CCS+Engineering+Bocce+Ball+Tournament+and+Social+Gathering">Confluence page</a> 
+          for rules and complete details.
+        </p>
+
+        <form method="post" action="{{ url_for('submitted_form') }}">
+              <label class="entry-label" for="name">Name:</label><input class="entry-input" type="text" name="name">
+              <label class="entry-label" for="email">Email address:</label><input class="entry-input" type="email" name="email">
+              <div style="clear:both;"></div>
+              <div class="participate-center">
+                <label for="participant_type">Participation:</label> <br />
+                  <input type="radio" name="participant_type" value="player">I want to play!<br />
+                  <input type="radio" name="participant_type" value="spectate">I want to spectate!<br />
+                  <input type="radio" name="participant_type" value="other">I want to do something else! (like eat and leave)<br />
+                <input type="submit">
+            </div>
+       </form> 
+      </div>
+    </div>
+  </body>
+</html>
