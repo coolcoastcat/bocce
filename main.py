@@ -4,15 +4,24 @@
 import logging
 import datetime
 import socket
+import config
+
+import model_datastore
 
 # [START imports]
 from flask import Flask, render_template, request
 # from google.cloud import datastore
 # [END imports]
 
-# [START create_app]
+# Start app and configure it
 app = Flask(__name__)
-# [END create_app]
+app.config.from_object(config)
+app.debug = debug
+app.testing = testing
+
+# Configure logging
+if not app.testing:
+    logging.basicConfig(level=logging.INFO)
 
 
 # [START default route]
@@ -39,7 +48,7 @@ def submitted_form():
     participant_type = request.form['participant_type']
     timestamp = datetime.datetime.utcnow()
 
-    # entity = datastore.Entity(key=ds.key('registration'))
+    # entity = datastore.Entity(key=ds.key('Registration'))
     # entity.update({
     #     'user_name': name,
     #     'email': email,
