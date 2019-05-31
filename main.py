@@ -16,8 +16,8 @@ from flask import Flask, render_template, request
 # Start app and configure it
 app = Flask(__name__)
 app.config.from_object(config)
-app.debug = debug
-app.testing = testing
+app.debug = False
+app.testing = False
 
 # Configure logging
 if not app.testing:
