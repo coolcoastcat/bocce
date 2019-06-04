@@ -67,6 +67,22 @@ def submitted_form():
     # [END render_template]
 
 
+# [START list]
+@app.route("/list")
+def list():
+    token = request.args.get('page_token', None)
+    if token:
+        token = token.encode('utf-8')
+
+    regs, next_page_token = model_datastore.list(cursor=token)
+
+    return render_template(
+        "list.html",
+        registrations=regs,
+        next_page_token=next_page_token)
+# [END list]
+
+
 @app.errorhandler(500)
 def server_error(e):
     # Log the error and stacktrace.
