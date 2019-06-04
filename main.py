@@ -50,7 +50,7 @@ def submitted_form():
     timestamp = datetime.datetime.utcnow()
 
     data = request.form.to_dict(flat=True)
-    data['timestamp'] = unicode(timestamp)
+    data['timestamp'] = timestamp
     app.logger.info(data)    
  
     model_datastore.update(data)
