@@ -18,9 +18,10 @@ body {
 
 .participate-center{
     margin: auto;
-    width: 50%;
+    width: 60%;
     overflow: auto;
 }
+
 
 .links{
     display: inline-block;
@@ -43,6 +44,10 @@ body {
   display: inline-block;
   float: left;
 }
+.p-input { 
+    margin-left:100px;
+}
+
 
 .list-basic {
     list-style-type: upper-roman;

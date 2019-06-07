@@ -49,10 +49,10 @@ def from_datastore(entity):
 
 
 # [START list]
-def list(limit=10, cursor=None):
+def list(limit=50, cursor=None):
     ds = get_client()
 
-    query = ds.query(kind='Registration', order=['name'])
+    query = ds.query(kind='Registration', order=['timestamp'])
     query_iterator = query.fetch(limit=limit, start_cursor=cursor)
     page = next(query_iterator.pages)
 
@@ -67,7 +67,7 @@ def list(limit=10, cursor=None):
 
 def read(id):
     ds = get_client()
-    key = ds.key('Registration', int(id))
+    key = ds.key('Registration', id)
     results = ds.get(key)
     return from_datastore(results)
 
@@ -76,13 +76,12 @@ def read(id):
 def update(data, id=None):
     ds = get_client()
     if id:
-        key = ds.key('Registration', int(id))
+        key = ds.key('Registration', id)
     else:
         key = ds.key('Registration')
 
     entity = datastore.Entity(
-        key=key,
-        exclude_from_indexes=['description'])
+        key=key)
 
     entity.update(data)
     ds.put(entity)
@@ -95,5 +94,5 @@ create = update
 
 def delete(id):
     ds = get_client()
-    key = ds.key('Registration', int(id))
+    key = ds.key('Registration', id)
     ds.delete(key)

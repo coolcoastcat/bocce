@@ -47,10 +47,11 @@ def submitted_form():
     name = request.form['name']
     email = request.form['email']
     participant_type = request.form['participant_type']
-    timestamp = datetime.datetime.utcnow()
+    timestamp = datetime.datetime.utcnow().isoformat()
 
     data = request.form.to_dict(flat=True)
     data['timestamp'] = timestamp
+    print(data)
     app.logger.info(data)    
  
     model_datastore.update(data)
@@ -75,20 +76,72 @@ def list():
         token = token.encode('utf-8')
 
     regs, next_page_token = model_datastore.list(cursor=token)
+    app.logger.info(type(regs[0]))
+    
+    teams = build_teams(regs)
 
     return render_template(
         "list.html",
         registrations=regs,
-        next_page_token=next_page_token)
+        next_page_token=next_page_token,teams=teams)
 # [END list]
 
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
 
 @app.errorhandler(500)
 def server_error(e):
     # Log the error and stacktrace.
     logging.exception('An error occurred during a request.')
-    return 'An internal error occurred.', 500
-# [END app]
+    return 'An internal error occurred', 500
+
+
+
+ # [START build_teams]
+def build_teams(registrations):
+    team = list()
+    teams = list()
+ 
+    # handle the zero case
+    if len(registrations) == 0:
+       return teams
+
+    # If the number of registrations is less than four, just add them and return
+    if len(registrations) <= 4:
+        for reg in registrations:
+            team.append(reg['name'])
+        teams.append(team)
+        return teams
+ 
+    reg_length = len(registrations)
+    
+    for idx,reg in enumerate(registrations):
+        
+        if len(team) < 4:  # If length of team is less than four, add to team and continue
+           team.append(reg['name'])
+
+        elif idx+1 == reg_length:  # Length of team is four also check if this is our last iteration, if so steal last from team to create new team
+            team_member_swap = team[-1]
+            team.pop()
+            teams.append(team.copy())
+            teams.append([team_member_swap,reg['name']])
+            team = list()
+
+        else: # save the old team and start a new one with the current reg
+            # print("Case 3a ",str(reg_length), "Iteration: ", str(idx), "Team: ", team, "Teams: ", teams)
+            teams.append(team.copy())
+            team = list()
+            team.append(reg['name'])
+
+    if len(team) > 0:
+        teams.append(team.copy()) # add the last team created
+
+    return teams
+# [END build_teams]
 
 if __name__ == "__main__":
+
     app.run(host='127.0.0.1', port=8080, debug=True)
