@@ -74,11 +74,12 @@ def list():
     token = request.args.get('page_token', None)
     if token:
         token = token.encode('utf-8')
-
+    app.logger.info("Getting list of results")
     regs, next_page_token = model_datastore.list(cursor=token)
-    app.logger.info(type(regs[0]))
+    app.logger.info("received list of results")
     
     teams = build_teams(regs)
+    app.logger.info("built teams list of results")
 
     return render_template(
         "list.html",
@@ -102,8 +103,8 @@ def server_error(e):
 
  # [START build_teams]
 def build_teams(registrations):
-    team = list()
-    teams = list()
+    team = []
+    teams = []
  
     # handle the zero case
     if len(registrations) == 0:
@@ -128,12 +129,12 @@ def build_teams(registrations):
             team.pop()
             teams.append(team.copy())
             teams.append([team_member_swap,reg['name']])
-            team = list()
+            team = []
 
         else: # save the old team and start a new one with the current reg
             # print("Case 3a ",str(reg_length), "Iteration: ", str(idx), "Team: ", team, "Teams: ", teams)
             teams.append(team.copy())
-            team = list()
+            team = []
             team.append(reg['name'])
 
     if len(team) > 0:
