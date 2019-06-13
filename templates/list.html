@@ -19,7 +19,6 @@
 {% block content %}
 
 <h3>Registrations</h3>
-
 {% for reg in registrations %}
 <div class="media">
     <div class="media-body">
@@ -29,6 +28,24 @@
       <strong>Timestamp</strong>: {{reg.timestamp}}
     </div>
 </div>
+
+
+{% else %}
+<p>No registrations found</p>
+{% endfor %}
+<hr>
+<h3>Teams</h3>
+{% for team in teams %}
+<div class="media">
+    <strong>Team {{ loop.index0 + 1 }}</strong>
+    <div class="media-body">
+        {% for name in team %}
+          {{name}}<br />
+        {% endfor %}
+    </div>
+</div>
+
+
 {% else %}
 <p>No registrations found</p>
 {% endfor %}

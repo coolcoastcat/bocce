@@ -70,7 +70,7 @@ def submitted_form():
 
 # [START list]
 @app.route("/list")
-def list():
+def submissions():
     token = request.args.get('page_token', None)
     if token:
         token = token.encode('utf-8')

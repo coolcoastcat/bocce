@@ -26,6 +26,7 @@ class TestMainMethods(unittest.TestCase):
                 registrations.append(entity)
             teams = build_teams(registrations)
             print("Teams for team size "+str(i),teams)
+        print (json.dumps(registrations))
  
 def build_teams(registrations):
     team = list()

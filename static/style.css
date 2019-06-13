@@ -52,3 +52,6 @@ body {
 .list-basic {
     list-style-type: upper-roman;
 }
+.media-body {
+    padding-left: 25px;
+}
