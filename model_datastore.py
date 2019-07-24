@@ -49,7 +49,7 @@ def from_datastore(entity):
 
 
 # [START list]
-def list(limit=50, cursor=None):
+def list(limit=None, cursor=None):
     ds = get_client()
 
     query = ds.query(kind='Registration', order=['timestamp'])
@@ -64,6 +64,12 @@ def list(limit=50, cursor=None):
     return entities, next_cursor
 # [END list]
 
+# [START registration_count]
+def registration_count():
+    regs, next_page_token = list()
+    
+    return len(regs)
+# [END registration_count]
 
 def read(id):
     ds = get_client()

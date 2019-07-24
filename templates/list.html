@@ -18,13 +18,19 @@
 
 {% block content %}
 
-<h3>Registrations</h3>
+<h3>{{registrations|length}} Registrations</h3>
 {% for reg in registrations %}
+{% set color = 'lightgreen' %}
+{% if reg.participant_type != 'player' %}
+  {% set color = 'yellow' %}
+{% endif %}
+    
+
 <div class="media">
     <div class="media-body">
       <strong>Name</strong>: {{reg.name}} <br>
       <strong>Email</strong>: {{reg.email}} <br>
-      <strong>Participation</strong>: {{reg.participant_type}} <br>
+      <strong>Participation</strong>:<span style="background-color: {{color}}"> {{reg.participant_type}} </span><br>
       <strong>Timestamp</strong>: {{reg.timestamp}}
     </div>
 </div>

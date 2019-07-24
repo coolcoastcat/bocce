@@ -37,7 +37,8 @@ def default():
 # [START form]
 @app.route('/form')
 def form():
-    return render_template('form.html')
+    reg_count = model_datastore.registration_count()
+    return render_template('form.html',reg_count=reg_count)
 # [END form]
 
 
@@ -108,7 +109,8 @@ def call_gcp_build_teams(registrations):
     url = 'https://us-central1-russels-playground.cloudfunctions.net/build_teams'
     players = list()
     for idx,reg in enumerate(registrations):
-        players.append(reg['name'])
+        if reg['participant_type'] == 'player':
+            players.append(reg['name'])
     
     jsonStr = '{\"players\": '+ json.dumps(players) + '}'
     print("calling gcp build_teams with: {}".format(jsonStr))
