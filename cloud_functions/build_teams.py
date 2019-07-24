@@ -1,5 +1,7 @@
 import json
 
+# Sample request JSON {"players":["Player1","Player2","Player3","Player4","Player5","Player6","Player7","Player8","Player9","Player10","Player11"]}
+
 # [START build_teams]
 def build_teams(request):
     team = []
@@ -8,8 +10,11 @@ def build_teams(request):
     content_type = request.headers['content-type']
     if content_type == 'application/json':
         request_json = request.get_json(silent=True)
-        if request_json and 'name' in request_json:
-            name = request_json['name']
+        if request_json and 'players' in request_json:
+            if isinstance(request_json, str):
+                request_json = json.loads(request_json)
+            print("request_json: {}".format(request_json))
+            players_list = request_json["players"]
         else:
             raise ValueError("JSON is invalid, or missing a 'name' property")
     elif content_type == 'application/octet-stream':
@@ -21,13 +26,6 @@ def build_teams(request):
     else:
         raise ValueError("Unknown content type: {}".format(content_type))
     
-    # Requests should contain JSON
-    request_json = request.get_json(silent=True)
-
-    if not request_json or 'players' not in request_json:
-        return json.dumps(teams)
-
-    players_list = request.players
 
     # handle the zero case
     if len(players_list) == 0:
@@ -65,3 +63,14 @@ def build_teams(request):
 
     return json.dumps(teams)
 # [END build_teams]
+
+def gen_player_test_data(num_players):
+    
+    print("{\"players\": [")
+    for x in range(num_players):
+        player_name = "Player"+str(x)
+        if x == num_players:
+            print("\"{}\"".format(player_name))
+        else: 
+            print("\"{}\",".format(player_name))
+    print("]}")

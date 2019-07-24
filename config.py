@@ -20,6 +20,9 @@ You can create and manage projects at https://console.developers.google.com
 
 import os
 
+
+GOOGLE_CLOUD_PROJECT=''
+
 # The secret key is used by Flask to encrypt session cookies.
 SECRET_KEY = 'secret'
 

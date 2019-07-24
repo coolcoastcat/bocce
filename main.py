@@ -5,6 +5,8 @@ import logging
 import datetime
 import socket
 import config
+import requests
+import json
 
 import model_datastore
 from google.cloud import datastore
@@ -78,7 +80,9 @@ def submissions():
     regs, next_page_token = model_datastore.list(cursor=token)
     app.logger.info("received list of results")
     
-    teams = build_teams(regs)
+    # teams = build_teams(regs)
+    teams = call_gcp_build_teams(regs)
+    print("teams type: {}".format(type(teams).__name__))
     app.logger.info("built teams list of results")
 
     return render_template(
@@ -100,6 +104,17 @@ def server_error(e):
     return 'An internal error occurred', 500
 
 
+def call_gcp_build_teams(registrations):
+    url = 'https://us-central1-russels-playground.cloudfunctions.net/build_teams'
+    players = list()
+    for idx,reg in enumerate(registrations):
+        players.append(reg['name'])
+    
+    jsonStr = '{\"players\": '+ json.dumps(players) + '}'
+    print("calling gcp build_teams with: {}".format(jsonStr))
+    response = requests.post(url, json=jsonStr)
+    print("received response: {}".format(response.text))
+    return response.json()
 
  # [START build_teams]
 def build_teams(registrations):
