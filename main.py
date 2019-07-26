@@ -8,8 +8,6 @@ import socket
 import config
 import requests
 import json
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 
 import model_datastore
 from google.cloud import datastore
