@@ -41,7 +41,6 @@ def default():
 @app.route('/form')
 def form():
     reg_count = model_datastore.registration_count()
-    app.logger.info("retrieved record count: "+str(reg_count))
     return render_template('form.html',reg_count=reg_count)
 # [END form]
 
