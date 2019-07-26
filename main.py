@@ -1,12 +1,15 @@
 
 
 # [START app]
+import os
 import logging
 import datetime
 import socket
 import config
 import requests
 import json
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 import model_datastore
 from google.cloud import datastore
@@ -60,7 +63,8 @@ def submitted_form():
  
     model_datastore.update(data)
 
-
+    email_body = "  Name: {}<br/>\n  Email: {}<br/>\n  Participation: {}<br/>\n  Timestamp: {}<br/>\n"
+    # send_email_notice(email_body)
     # [END submitted]
     # [START render_template]
     return render_template(
@@ -81,6 +85,7 @@ def submissions():
     app.logger.info("Getting list of results")
     regs, next_page_token = model_datastore.list(cursor=token)
     app.logger.info("received list of results")
+    key =  os.environ.get('SENDGRID_API_KEY')
     
     # teams = build_teams(regs)
     teams = call_gcp_build_teams(regs)
@@ -90,7 +95,9 @@ def submissions():
     return render_template(
         "list.html",
         registrations=regs,
-        next_page_token=next_page_token,teams=teams)
+        next_page_token=next_page_token,
+        teams=teams,
+        key=key)
 # [END list]
 
 
@@ -160,6 +167,34 @@ def build_teams(registrations):
 
     return teams
 # [END build_teams]
+
+# [START send_email_notice]
+def send_email_notice(email_body):
+    user_address = "russell.neville@camibahealth.com"
+
+    sender_address = 'Bocce Registration <russell@appspot.gserviceaccount.com>'
+    mail_subject = 'New Bocce registration'
+    body = """Registration details:
+{}
+""".format(email_body)
+    
+    message = Mail(
+
+    from_email=sender_address,
+    to_emails=user_address,
+    subject=mail_subject,
+    html_content=body)
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(str(e))
+
+# [END send_email_notice]
+
 
 if __name__ == "__main__":
 

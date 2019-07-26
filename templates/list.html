@@ -19,6 +19,7 @@
 {% block content %}
 
 <h3>{{registrations|length}} Registrations</h3>
+Key: {{key}}<br/><br/>
 {% for reg in registrations %}
 {% set color = 'lightgreen' %}
 {% if reg.participant_type != 'player' %}
